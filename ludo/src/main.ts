@@ -1,11 +1,11 @@
 import "./style.css";
 import { io } from "socket.io-client";
+const socket = io("http://localhost:3000");
 
 ///////////////// selectors
 const dice = document?.querySelector<HTMLImageElement>(".dice");
 const roll = document?.querySelector<HTMLDivElement>(".btn--roll");
 const hold = document?.querySelector<HTMLDivElement>(".btn--hold");
-console.log(dice);
 
 // ROLL DICE
 const rollDice = function () {
@@ -14,12 +14,18 @@ const rollDice = function () {
   return roll;
 };
 
-const socket = io('http://localhost:3000');
+roll?.addEventListener("click", function () {
+  const roll = rollDice();
+  console.log(roll);
+  socket.emit("first", roll);
+});
 
-// socket.on("message", (msg) => {
-//   console.log("hello world", msg);
-// });
+socket.on("waiting", (data) => {
+  console.log(data);
+});
 
-socket.emit("first","hii")
+socket.on("gameStart", (data) => {
+  console.log(data);
+});
 
-// socket.emit("great", "hi sup!");
+// console.log(socket);
