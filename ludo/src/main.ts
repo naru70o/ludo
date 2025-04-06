@@ -1,4 +1,5 @@
 import "./style.css";
+import { io } from "socket.io-client";
 
 ///////////////// selectors
 const dice = document?.querySelector<HTMLImageElement>(".dice");
@@ -12,3 +13,13 @@ const rollDice = function () {
   console.log(roll);
   return roll;
 };
+
+const socket = io('http://localhost:3000');
+
+// socket.on("message", (msg) => {
+//   console.log("hello world", msg);
+// });
+
+socket.emit("first","hii")
+
+// socket.emit("great", "hi sup!");
