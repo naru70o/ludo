@@ -20,11 +20,19 @@ roll?.addEventListener("click", function () {
   socket.emit("first", roll);
 });
 
+// Automatically join game on page load
+socket.connect();
+socket.emit("join");
+
 socket.on("waiting", (data) => {
   console.log(data);
 });
 
-socket.on("gameStart", (data) => {
+socket.on("game-start", (data) => {
+  console.log(data);
+});
+
+socket.on("joined", (data) => {
   console.log(data);
 });
 
