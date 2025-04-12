@@ -6,7 +6,9 @@ const socket = io("http://localhost:3000");
 const dice = document?.querySelector<HTMLImageElement>(".dice");
 const roll = document?.querySelector<HTMLDivElement>(".btn--roll");
 const hold = document?.querySelector<HTMLDivElement>(".btn--hold");
-
+const alert = document.querySelector(".alert") as HTMLParagraphElement;
+const alertMessage = document.querySelector(".alert p") as HTMLParagraphElement;
+console.log(alert);
 // ROLL DICE
 const rollDice = function () {
   const roll = Math.trunc(Math.random() * 6 + 1);
@@ -25,7 +27,8 @@ socket.connect();
 socket.emit("join");
 
 socket.on("waiting", (data) => {
-  console.log(data);
+  alert.classList.remove("hidden");
+  alertMessage.textContent = data;
 });
 
 socket.on("game-start", (data) => {
