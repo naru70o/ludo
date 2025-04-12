@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
     }
 
     if (game.players.length === 2) {
-      game.currentPlayer = 0;
+      game.currentPlayer = 1;
       io.to(gameId).emit("game-start", game);
       console.log(`Game ${gameId} started`);
     }
