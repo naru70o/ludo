@@ -30,6 +30,15 @@ socket.on("waiting", (data) => {
 
 socket.on("game-start", (data) => {
   console.log(data);
+
+if (!data.currentPlayer) {
+  console.log("Hiding Player 1's buttons because Player 0 is active.");
+  roll?.classList.add("hidden");
+  hold?.classList.add("hidden");
+} else {
+  roll?.classList.remove("hidden");
+  hold?.classList.remove("hidden");
+}
 });
 
 socket.on("joined", (data) => {

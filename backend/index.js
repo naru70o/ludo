@@ -60,12 +60,18 @@ io.on("connection", (socket) => {
       isFull: game.players.length === 2,
     });
 
+    if (game.players.length === 1) {
+      io.to(gameId).emit("waiting", "wait your opponent to join");
+    }
+
     if (game.players.length === 2) {
       game.currentPlayer = 0;
       io.to(gameId).emit("game-start", game);
       console.log(`Game ${gameId} started`);
     }
   });
+
+  //
 });
 
 server.listen(3000, () => {
