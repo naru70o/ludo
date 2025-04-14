@@ -18,6 +18,7 @@ const generateGameId = () =>
   `GAME-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
 
 const gameState = {};
+let diceValue;
 
 io.on("connection", (socket) => {
   console.log("connect is running", socket.id);
@@ -72,17 +73,19 @@ io.on("connection", (socket) => {
 
   socket.on("roll", (gameId) => {
     const dice = Math.floor(Math.random() * 6) + 1;
+    diceValue = dice;
     const game = gameState[gameId];
     console.log(game, "backend");
     const player = game.players.find((p) => p.id === socket.id);
 
     if (!player || player.index !== game.currentPlayer) {
-      socket.emit("action-error", "Not your turn!");
+      socket.emit("action-error", { message: "Not your turn!", game: game });
       return;
     }
 
     if (dice === 1) {
       game.currentScore = 0;
+      game.scores[game.currentPlayer] = 0;
       switchTurn(gameId);
     } else {
       game.currentScore += dice;
@@ -91,12 +94,24 @@ io.on("connection", (socket) => {
     console.log(game);
     io.to(gameId).emit("update", game, dice);
   });
+
+  socket.on("hold", (gameId) => {
+    holdGame(gameId, diceValue);
+  });
 });
 
 function switchTurn(gameId) {
   const game = gameState[gameId];
   game.currentPlayer = game.currentPlayer === 0 ? 1 : 0;
   io.to(gameId).emit("update", game);
+}
+
+function holdGame(gameId, dice) {
+  const game = gameState[gameId];
+  game.scores[game.currentPlayer] += game.currentScore;
+  game.currentScore = 0;
+  game.currentPlayer = game.currentPlayer === 0 ? 1 : 0;
+  io.to(gameId).emit("update", game, dice);
 }
 
 function checkWin(gameId) {

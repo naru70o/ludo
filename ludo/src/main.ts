@@ -50,6 +50,12 @@ roll?.addEventListener("click", function () {
   }
 });
 
+hold?.addEventListener("click", () => {
+  if (currentGameId && playerIndex === currentPlayer) {
+    socket.emit("hold", currentGameId);
+  }
+});
+
 // Store player index and game ID when joining
 
 socket.on("joined", (data: { gameId: string; playerIndex: number }) => {
@@ -73,16 +79,18 @@ socket.on("joined", (data) => {
 });
 
 socket.on("update", (data, diceValue) => {
-  if (!diceValue) return;
+  if (!diceValue) {
+    diceValue = 1;
+  }
   currentPlayer = data.currentPlayer;
   console.log(data, " game state");
 
-  // Enable/disable buttons based on turn
-  if (roll && hold) {
-    const isActive = playerIndex === currentPlayer;
-    roll.disabled = !isActive;
-    hold.disabled = !isActive;
-  }
+  // // Enable/disable buttons based on turn
+  // if (roll && hold) {
+  //   const isActive = playerIndex === currentPlayer;
+  //   roll.disabled = !isActive;
+  //   hold.disabled = !isActive;
+  // }
 
   const diceImageValue = diceValue.toString();
   console.log("dice value,", diceImageValue);
@@ -96,6 +104,11 @@ socket.on("update", (data, diceValue) => {
     player1CurrentScore.textContent = data.currentScore;
   } else if (data.currentPlayer === 1) {
     player2CurrentScore.textContent = data.currentScore;
+  }
+
+  if (player1Score && player2Score) {
+    player1Score.textContent = data.scores[0];
+    player2Score.textContent = data.scores[1];
   }
 
   // Update player active states
