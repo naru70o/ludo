@@ -83,9 +83,10 @@ io.on("connection", (socket) => {
       return;
     }
 
+    checkWin(gameId);
+
     if (dice === 1) {
       game.currentScore = 0;
-      game.scores[game.currentPlayer] = 0;
       switchTurn(gameId);
     } else {
       game.currentScore += dice;
@@ -109,6 +110,7 @@ function switchTurn(gameId) {
 function holdGame(gameId, dice) {
   const game = gameState[gameId];
   game.scores[game.currentPlayer] += game.currentScore;
+  checkWin(gameId);
   game.currentScore = 0;
   game.currentPlayer = game.currentPlayer === 0 ? 1 : 0;
   io.to(gameId).emit("update", game, dice);
@@ -116,7 +118,7 @@ function holdGame(gameId, dice) {
 
 function checkWin(gameId) {
   const game = gameState[gameId];
-  if (game.scores[game.currentPlayer] >= 100) {
+  if (game.scores[game.currentPlayer] >= 10) {
     io.to(gameId).emit("win", game.currentPlayer);
   }
 }

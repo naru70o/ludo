@@ -24,6 +24,8 @@ const player2CurrentScore = document.getElementById(
 ) as HTMLParagraphElement;
 
 const playerSections = document.querySelectorAll(".player");
+// const player1 = document.querySelector(".player--0");
+// const player2 = document.querySelector(".player--1");
 
 const alert = document.querySelector(".alert") as HTMLParagraphElement;
 const alertMessage = document.querySelector(".alert p") as HTMLParagraphElement;
@@ -119,4 +121,16 @@ socket.on("update", (data, diceValue) => {
 
 socket.on("action-error", (data) => {
   console.log(data);
+});
+
+socket.on("win", (currentPlayer: number) => {
+  const player = document.querySelector(`.player--${currentPlayer}`);
+
+  if (roll && hold) {
+    roll.disabled = true;
+    hold.disabled = true;
+  }
+
+  if (!player) return;
+  player.classList.add("player--winner");
 });
