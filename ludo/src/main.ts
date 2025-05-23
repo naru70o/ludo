@@ -24,8 +24,6 @@ const player2CurrentScore = document.getElementById(
 ) as HTMLParagraphElement;
 
 const playerSections = document.querySelectorAll(".player");
-// const player1 = document.querySelector(".player--0");
-// const player2 = document.querySelector(".player--1");
 
 const alert = document.querySelector(".alert") as HTMLParagraphElement;
 const alertMessage = document.querySelector(".alert p") as HTMLParagraphElement;
@@ -38,13 +36,6 @@ socket.emit("join");
 let currentGameId: string | null = null;
 let playerIndex: number | null = null;
 let currentPlayer: number | null = 0;
-
-// ROLL DICE
-const rollDice = function () {
-  const roll = Math.trunc(Math.random() * 6 + 1);
-  console.log(roll);
-  return roll;
-};
 
 roll?.addEventListener("click", function () {
   if (currentGameId && playerIndex === currentPlayer) {
@@ -87,13 +78,6 @@ socket.on("update", (data, diceValue) => {
   currentPlayer = data.currentPlayer;
   console.log(data, " game state");
 
-  // // Enable/disable buttons based on turn
-  // if (roll && hold) {
-  //   const isActive = playerIndex === currentPlayer;
-  //   roll.disabled = !isActive;
-  //   hold.disabled = !isActive;
-  // }
-
   const diceImageValue = diceValue.toString();
   console.log("dice value,", diceImageValue);
 
@@ -134,3 +118,4 @@ socket.on("win", (currentPlayer: number) => {
   if (!player) return;
   player.classList.add("player--winner");
 });
+

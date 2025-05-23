@@ -108,6 +108,7 @@ body {
   height: 100vh;
   color: #333;
   background-image: linear-gradient(to top left, #753682 0%, #bf2e34 100%);
+  /* background-color: #0000o; */
   display: flex;
   align-items: center;
   justify-content: center;

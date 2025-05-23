@@ -117,8 +117,8 @@ function holdGame(gameId, dice) {
 }
 
 function checkWin(gameId) {
-  const game = gameState[gameId];
-  if (game.scores[game.currentPlayer] >= 10) {
+  const game = gameState[gameId]; 
+  if (game.scores[game.currentPlayer] >= 100) {
     io.to(gameId).emit("win", game.currentPlayer);
   }
 }
